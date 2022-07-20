@@ -1,0 +1,77 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Todo App • Büşra Çiftlik</title>
+  <link rel="stylesheet" th:href="@{/webjars/todomvc-common/base.css}">
+  <link rel="stylesheet" th:href="@{/webjars/todomvc-app-css/index.css}">
+</head>
+<body>
+<section>
+  <header class="header">
+    <h1 style="width: 100%;font-size: 80px;font-weight: 200;text-align: left;color: #b83f45; font-family: 'Baskerville Old Face'">things to do</h1>
+    <div>
+    <form th:action="@{/}" method="post" th:object="${item}">
+      <input class="new-todo" placeholder="Add a new todo item" autofocus
+             th:field="*{title}">
+    </form>
+    </div>
+
+  </header>
+  <section class="main" th:if="${totalNumberOfItems > 0}">
+    <form th:action="@{/toggle-all}" th:method="put">
+      <input id="toggle-all" class="toggle-all" type="checkbox"
+             onclick="this.form.submit()">
+      <label title="Complete all" for="toggle-all">Mark all as complete</label>
+    </form>
+    <ul class="todo-list" th:remove="all-but-first">
+      <li th:insert="fragments :: todoItem(${item})" th:each="item : ${todos}" th:remove="tag">
+      </li>
+      </li>
+      <li class="completed">
+        ...
+      </li>
+      <li>
+        ...
+      </li>
+    </ul>
+  </section>
+  <footer class="footer">
+    <th:block th:unless="${numberOfActiveItems == 1}">
+      <span class="todo-count"><strong th:text="${numberOfActiveItems}">0</strong> items left</span>
+    </th:block>
+    <th:block th:if="${numberOfActiveItems == 1}">
+      <span class="todo-count"><strong>1</strong> item left</span>
+    </th:block>
+    <ul class="filters">
+      <li>
+        <a th:href="@{/}"
+           th:classappend="${filter.name() == 'ALL'?'selected':''}">All</a>
+      </li>
+      <li>
+        <strong><a style="background: yellow; border-color: yellow" th:href="@{/active}"
+           th:classappend="${filter.name() == 'ACTIVE'?'selected':''}">Active</a></strong>
+      </li>
+      <li>
+        <strong><a style="background: forestgreen; border-color: forestgreen" th:href="@{/completed}"
+           th:classappend="${filter.name() == 'COMPLETED'?'selected':''}">Completed</a></strong>
+      </li>
+    </ul>
+    <form th:action="@{/completed}" th:method="delete"
+          th:if="${numberOfCompletedItems > 0}">
+      <button class="clear-completed" onclick="return confirm('Are you sure you want to delete all completed items?');">Delete completed</button>
+    </form>
+  </footer>
+</section>
+<footer class="footer" th:if="${totalNumberOfItems > 0}">
+  <b><i><p>Tubisad Java Developer Bootcamp</p></i></b>
+</footer>
+<script th:src="@{/webjars/todomvc-common/base.js}"></script>
+
+
+
+</body>
+</html>
